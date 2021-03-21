@@ -1,5 +1,6 @@
 const express = require('express')
 const Task = require('../models/task')
+const User = require('../models/user')
 const router = new express.Router()
 
 router.post('/tasks', async (req,res) => {
@@ -43,7 +44,6 @@ router.get('/tasks/:id', async (req,res) => {
 router.patch('/tasks/:id', async (req,res) => {
     const _id = req.params.id
     const updates = Object.keys(req.body)
-    
     const allowedUpdates = ['description', 'completed']
     const isValidOperation = updates.every((item) => {
         return allowedUpdates.includes(item)
@@ -52,7 +52,14 @@ router.patch('/tasks/:id', async (req,res) => {
         return res.status(400).send({error: 'Invalid TASK updates!'})
     }
     try {
-        const task = await Task.findByIdAndUpdate(_id, req.body, {new: true, runValidators: true})
+        const task = await Task.findById(_id)
+        updates.forEach((update) => {
+            task[update] = req.body[update]
+        })
+        
+        await task.save()
+
+        //const task = await Task.findByIdAndUpdate(_id, req.body, {new: true, runValidators: true})
         if (!task) { 
             return res.status(404).send()
         }
