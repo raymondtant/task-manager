@@ -14,7 +14,7 @@ const port = process.env.PORT || 3000
 //     }
 // })
 
-const maintenanceMode = true
+const maintenanceMode = false
 app.use((req, res, next) => {
     if(maintenanceMode) {
         res.status(503).send("Maintenance Mode!")
