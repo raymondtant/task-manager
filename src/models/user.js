@@ -58,7 +58,19 @@ const userSchema = new mongoose.Schema({
     }]
 })
 
-//instance method
+//instance methods
+// toJSON??  overides because
+userSchema.methods.toJSON = function () {
+    const user = this
+    const userObject  = user.toObject()
+//convert to object to manipulate what is on that object
+    delete userObject.password
+    delete userObject.tokens
+
+    return userObject
+}
+
+
 userSchema.methods.generateAuthToken = async function () {
     const user = this
     const token = jwt.sign({_id: user._id.toString()},'thisismynewcourse')
@@ -68,6 +80,9 @@ userSchema.methods.generateAuthToken = async function () {
 
     return token
 }
+
+
+
 
 //model methods
 userSchema.statics.findByCredentials = async (email, password) => {

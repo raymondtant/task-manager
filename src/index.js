@@ -36,14 +36,27 @@ app.listen(port,() => {
 
 
 
-const jwt = require('jsonwebtoken')
+// const jwt = require('jsonwebtoken')
 
-const myFunction  = async () => {
+// const myFunction  = async () => {
 
-    const token = jwt.sign({_id: 'abc123'},'thisismynewcourse', {expiresIn: '10 seconds'})
-    console.log(token)
+//     const token = jwt.sign({_id: 'abc123'},'thisismynewcourse', {expiresIn: '10 seconds'})
+//     console.log(token)
 
-    console.log(jwt.verify(token, 'thisismynewcourse'))
-}
+//     console.log(jwt.verify(token, 'thisismynewcourse'))
+// }
  
-myFunction() 
+// myFunction() 
+
+const pet = {
+    name: 'cookie'
+}
+
+pet.toJSON = function () {
+//    console.log(this)
+    this.age = 12
+    this.animal = "cat"
+    delete this.name
+    return this
+}
+console.log(JSON.stringify(pet))

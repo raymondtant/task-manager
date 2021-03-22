@@ -1,4 +1,5 @@
 const express = require('express')
+const mongoose = require('mongoose')
 const User = require('../models/user')
 const router = new express.Router()
 const auth = require('../middleware/auth')
@@ -18,11 +19,44 @@ router.post('/users/login', async (req, res) => {
     try {
         const user = await User.findByCredentials(req.body.email, req.body.password)
         const token = await user.generateAuthToken()
-        res.send({user,token})
+        res.send({user: user ,token})
     } catch (error) {
         res.status(400).send()
     }
 })
+
+
+router.post('/users/logout', auth, async (req, res) => {
+    try {
+        
+        //iterates until when not equal
+        req.user.tokens = req.user.tokens.filter(( token )=>{
+            
+            
+            return token.token !== req.token
+
+        })
+        console.log('Logged off')
+        await req.user.save()
+        res.send()
+    } catch (error) {
+        res.status(500).send()
+    }
+})
+
+router.post('/users/logoutAll', auth, async (req, res) => {
+    try {
+        
+
+        req.user.tokens = []
+        console.log('Logged out of ALL')
+        await req.user.save()
+        res.send()
+    } catch (error) {
+        res.status(500).send()
+    }
+})
+
 
 router.get('/users/me', auth,  async (req,res) => {
     // try {
