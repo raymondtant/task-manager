@@ -60,3 +60,24 @@ pet.toJSON = function () {
     return this
 }
 console.log(JSON.stringify(pet))
+
+
+
+const Task = require('./models/task')
+const User = require('./models/user')
+
+const main = async () => {
+// 60588ef8cab33a2d2c3607a0
+
+// const task = await Task.findById('60588ef8cab33a2d2c3607a0')
+// await task.populate('owner').execPopulate()
+// console.log(task.owner)
+
+const user = await User.findById('60588b4d9449f620bc21f433')
+await user.populate('tasks').execPopulate()
+//console.log(user.tasks)
+ 
+
+}
+
+main()
