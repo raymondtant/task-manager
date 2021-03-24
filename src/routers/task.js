@@ -20,14 +20,33 @@ router.post('/tasks', auth , async (req,res) => {
     }
 })
 
- router.get('/tasks', auth, async (req,res) => {
+//This provides an array of data
+//GET /tasks?completed=false
+//GET /tasks?limit=10&skip=0     (first 10 results)
+//GET /tasks?limit=10&skip=20     (second 10 results)
+router.get('/tasks', auth, async (req,res) => {
     
+    const match = {}
+
+    if(req.query.completed) {
+        match.completed = req.query.completed === 'true'
+    }
+
     try {
-       // console.log(req.user._id)
+    
       
-     // const tasks = await Task.find({ owner: req.user._id})
-     await req.user.populate('tasks').execPopulate()
-     //await user.populate('tasks').execPopulate()
+// const tasks = await Task.find({ owner: req.user._id})
+//Use query string to return a subset of tasks
+
+     await req.user.populate({
+         path: 'tasks',
+         match,
+         options: {
+            limit: parseInt(req.query.limit),
+            skip: parseInt(req.query.skip)
+         }
+     }).execPopulate()
+    
       
        res.send( req.user.tasks )
     } catch (error) {

@@ -127,10 +127,12 @@ router.delete('/users/me', auth, async (req,res) => {
         // if(!user) {
         //     return res.status(404).send()
         // }
-
+        console.log('Remove /users/me ' + _id)
+        console.log('delete /users/me ' + req.user)
         await req.user.remove()
         res.send(req.user)
     } catch (error) {
+        console.log(error)
         res.status(500).send(error)
     }
 })

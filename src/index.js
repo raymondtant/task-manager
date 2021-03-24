@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 require('./db/mongoose')
 const userRouter = require('./routers/user')
 const taskRouter = require('./routers/task')
+
 const app  = express()
 const port = process.env.PORT || 3000
 
@@ -66,18 +67,27 @@ console.log(JSON.stringify(pet))
 const Task = require('./models/task')
 const User = require('./models/user')
 
-const main = async () => {
-// 60588ef8cab33a2d2c3607a0
+// const main = async () => {
+// // 60588ef8cab33a2d2c3607a0
 
-// const task = await Task.findById('60588ef8cab33a2d2c3607a0')
-// await task.populate('owner').execPopulate()
-// console.log(task.owner)
+// // const task = await Task.findById('60588ef8cab33a2d2c3607a0')
+// // await task.populate('owner').execPopulate()
+// // console.log(task.owner)
 
-const user = await User.findById('60588b4d9449f620bc21f433')
-await user.populate('tasks').execPopulate()
-//console.log(user.tasks)
- 
+// const user = await User.findById('60588b4d9449f620bc21f433')
+// await user.populate('tasks').execPopulate()
+// console.log(user.tasks)
 
-}
 
-main()
+// }
+
+//main()
+
+//wacky shorthand
+const mymatch = {}
+const fakevar = {completed:'false'}
+
+mymatch.completed = fakevar.completed === 'true'
+
+console.log(fakevar)
+console.log(mymatch)
