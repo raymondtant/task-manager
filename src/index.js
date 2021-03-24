@@ -67,21 +67,39 @@ console.log(JSON.stringify(pet))
 const Task = require('./models/task')
 const User = require('./models/user')
 
-// const main = async () => {
-// // 60588ef8cab33a2d2c3607a0
+const multer = require('multer')
+const upload = multer({
+    dest: 'images',
+    limits: {
+        fileSize: 1000000
+    },
+    fileFilter(req, file, cb) {
 
-// // const task = await Task.findById('60588ef8cab33a2d2c3607a0')
-// // await task.populate('owner').execPopulate()
-// // console.log(task.owner)
+        // cb(new Error('file must be a PDF'))
+        // cb(undefinded, true)
+        // cb (undefined, fasle)
 
-// const user = await User.findById('60588b4d9449f620bc21f433')
-// await user.populate('tasks').execPopulate()
-// console.log(user.tasks)
+        if(!file.originalname.match(/\.(doc|docx)$/)) {
+            return cb(new Error('file must be a word doc'))
+        }
+        cb(undefined, true)
+
+    }
+})
+
+const errorMiddleware = (res, req, next) => {
+    throw new Error('From my middleware')
+}
+
+app.post('/upload', upload.single('upload') , (req, res) => {
+    
+    res.send()
+
+}, (error, req, res, next) => {
+    res.status(400).send({error: error.message})
+})
 
 
-// }
-
-//main()
 
 //wacky shorthand
 const mymatch = {}
@@ -91,3 +109,6 @@ mymatch.completed = fakevar.completed === 'true'
 
 console.log(fakevar)
 console.log(mymatch)
+
+//uploads
+

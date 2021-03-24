@@ -3,6 +3,22 @@ const mongoose = require('mongoose')
 const User = require('../models/user')
 const router = new express.Router()
 const auth = require('../middleware/auth')
+const multer = require('multer')
+const avatar = multer({
+    dest: 'avatar',
+    limits: {
+        fileSize: 1000000
+    },
+    fileFilter(req, file, cb) {
+
+        if(!file.originalname.match(/\.(png|jpg|jpeg)$/)) {
+            return cb(new Error('File must be a valid image file.'))
+        }
+        cb(undefined, true)
+
+    }
+})
+
 
 router.post('/users', async (req,res) => {
     const user = new User(req.body)
@@ -137,7 +153,12 @@ router.delete('/users/me', auth, async (req,res) => {
     }
 })
 
+router.post('/users/me/avatar', avatar.single('avatar'), (req,res) => {
 
+    res.send()
+
+
+})
 
 
 module.exports = router
