@@ -1,9 +1,13 @@
 const express = require('express')
 const mongoose = require('mongoose')
-const User = require('../models/user')
-const router = new express.Router()
-const auth = require('../middleware/auth')
 const multer = require('multer')
+const sharp = require('sharp')
+const {sendWelcomeEmail, sendGoodByeEmail } = require('../emails/accounts')
+const User = require('../models/user')
+const auth = require('../middleware/auth')
+
+const router = new express.Router()
+
 const avatar = multer({
    // dest: 'avatar',
     limits: {
@@ -24,6 +28,7 @@ router.post('/users', async (req,res) => {
     const user = new User(req.body)
     try {
         await user.save()
+        sendWelcomeEmail(user.email, user.name)
         const token = await user.generateAuthToken()
         res.status(201).send({user, token})
     } catch (e) {
@@ -146,6 +151,7 @@ router.delete('/users/me', auth, async (req,res) => {
         console.log('Remove /users/me ' + _id)
         console.log('delete /users/me ' + req.user)
         await req.user.remove()
+        sendGoodByeEmail(req.user.email, req.user.name)
         res.send(req.user)
     } catch (error) {
         console.log(error)
@@ -154,7 +160,13 @@ router.delete('/users/me', auth, async (req,res) => {
 })
 
 router.post('/users/me/avatar', auth,  avatar.single('avatar'), async (req,res) => {
-    req.user.avatar = req.file.buffer
+    
+    const buffer = await sharp(req.file.buffer).resize({ width: 250, height: 250}).png().toBuffer()
+    
+    req.user.avatar = buffer
+
+    //req.user.avatar = req.file.buffer
+    
     await req.user.save()
     res.send()
 
@@ -171,14 +183,14 @@ router.delete('/users/me/avatar',auth, async (req,res) => {
 })
 
 //GET image
-router.get('/users/:id/avatar',auth, async (req, res) => {
+router.get('/users/:id/avatar', async (req, res) => {
 try {
     const user = await User.findById(req.params.id)
     if (!user || !user.avatar) {
         throw new Error()
     }
 
-    res.set('Content-Type','image/jpg')
+    res.set('Content-Type','image/png')
     res.send(user.avatar)
 
 } catch (error) {
