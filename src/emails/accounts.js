@@ -1,9 +1,6 @@
 const sgMail = require('@sendgrid/mail')
 
-
-const sendgridAPIKey = ''
-
-sgMail.setApiKey(sendgridAPIKey)
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 // sgMail.send({
 //     to: 'john@jpanzer.com',
@@ -37,7 +34,7 @@ const sendGoodByeEmail = (email, name) => {
     })
 }
 
-
+ 
 
 
 module.exports = {
