@@ -1,11 +1,13 @@
-const express = require('express')
-const mongoose = require('mongoose')
-require('./db/mongoose')
-const userRouter = require('./routers/user')
-const taskRouter = require('./routers/task')
+const app = require('./app')
 
-const app  = express()
-const port = process.env.PORT 
+// const express = require('express')
+// const mongoose = require('mongoose')
+// require('./db/mongoose')
+// const userRouter = require('./routers/user')
+// const taskRouter = require('./routers/task')
+
+// const app  = express()
+ const port = process.env.PORT 
 
 
 // app.use((req, res, next ) => {
@@ -16,18 +18,18 @@ const port = process.env.PORT
 //     }
 // })
 
-const maintenanceMode = false
-app.use((req, res, next) => {
-    if(maintenanceMode) {
-        res.status(503).send("Maintenance Mode!")
-    } else { next() }
-}) 
+// const maintenanceMode = false
+// app.use((req, res, next) => {
+//     if(maintenanceMode) {
+//         res.status(503).send("Maintenance Mode!")
+//     } else { next() }
+// }) 
  
 
 
-app.use(express.json())
-app.use(userRouter)
-app.use(taskRouter)
+// app.use(express.json())
+// app.use(userRouter)
+// app.use(taskRouter)
 
 
 

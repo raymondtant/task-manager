@@ -23,7 +23,7 @@ const avatar = multer({
     }
 })
 
-
+//CREATE USER
 router.post('/users', async (req,res) => {
     const user = new User(req.body)
     try {
@@ -148,8 +148,8 @@ router.delete('/users/me', auth, async (req,res) => {
         // if(!user) {
         //     return res.status(404).send()
         // }
-        console.log('Remove /users/me ' + _id)
-        console.log('delete /users/me ' + req.user)
+       // console.log('Remove /users/me ' + _id)
+        //console.log('delete /users/me ' + req.user)
         await req.user.remove()
         sendGoodByeEmail(req.user.email, req.user.name)
         res.send(req.user)
