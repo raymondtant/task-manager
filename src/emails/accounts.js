@@ -22,7 +22,7 @@ const sendWelcomeEmail = (email, name) => {
 //     subject: 'Welcome Message!',
 //     text: `Welcome to the app, ${name}. Let me know how it works.`
 // })
-console.log('REMEMBER to TURN EMAIL BACK ON...')
+//console.log('REMEMBER to TURN EMAIL BACK ON...')
 }
 
 const sendGoodByeEmail = (email, name) => {
@@ -32,7 +32,7 @@ const sendGoodByeEmail = (email, name) => {
     //     subject: 'Good Bye Message!',
     //     text: `Good Bye, ${name}. Sorry to see you go.`
     // })
-    console.log('REMEMBER to TURN EMAIL BACK ON...')
+ //   console.log('REMEMBER to TURN EMAIL BACK ON...')
 }
 
  
