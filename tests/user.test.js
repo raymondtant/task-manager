@@ -147,4 +147,29 @@ test('Should DELETE account for authenticated', async () => {
 
 })
 
+test('Should update valid user fields', async () => {
 
+const response = await request(app)
+    .patch('/users/me')
+    .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+    .send({ name: 'Michael Tant'})
+    .expect(200)
+
+ expect(response.body.name).toBe("Michael Tant")
+
+const user = await User.findById(userOneId)
+expect(user.name).toEqual("Michael Tant")
+
+})
+
+test('Should NOT update invalid user fields', async () => {
+
+    const response = await request(app)
+        .patch('/users/me')
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .send({ location: 'Memphis'})
+        .expect(400)
+    
+     expect(response.body.location).not.toBe("Memphis")
+    
+    })
