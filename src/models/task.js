@@ -23,7 +23,7 @@ const taskSchema = new mongoose.Schema(
 
 taskSchema.pre('save', async function (next) {
     const task = this
-    console.log('This is a task pre save middleware.')
+   // console.log('This is a task pre save middleware.')
     next()
 })
 
