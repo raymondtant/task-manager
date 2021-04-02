@@ -2,7 +2,7 @@ const request = require('supertest')
 const app = require('../src/app')
 const Task = require('../src/models/task')
 
-const {userOne, userOneId, setupDatabase} = require('./fixtures/db')
+const {userOne, userOneId, userTwoId, userTwo, setupDatabase} = require('./fixtures/db')
 
 
 
@@ -39,6 +39,29 @@ test('Should get tasks for user', async () => {
     // expect(task).not.toBeNull()
     // expect(task.completed).toBe(false)
     expect(response.body.length).toBe(2)
-
+    //console.log(response.body[0]._id)
 })
 
+test('userTwo delete userOne\'s task by ID', async () => {
+    
+    const userOnesTasks = await request(app)
+    .get('/tasks')
+    .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+    .send().expect(200)
+
+    console.log(userOnesTasks.body[0]._id)
+    
+    const response = await request(app)
+    .delete('/tasks/'+userOnesTasks.body[0]._id)
+    .set('Authorization', `Bearer ${userTwo.tokens[0].token}`)
+    .send().expect(404)
+
+//check DB make sure record is still there
+await request(app)
+.delete('/tasks/'+userOnesTasks.body[0]._id)
+.set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+.send().expect(200)
+     
+
+
+})
